@@ -27,7 +27,7 @@ const MyFormik = ({
     }, [status]);
     return (
         <div>
-            <Form>
+            <Form className="MemberForm">
                 <label htmlFor="name">
                     Name:
                 </label>
@@ -179,6 +179,9 @@ const MyFormik = ({
                 type="text"
                 name="city"
                 />
+                <label htmlFor="TermsOfService">
+                    Terms of Service:
+                </label>
                 <Field
                 id="TermsOfService"
                 type="checkbox"
