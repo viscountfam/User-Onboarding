@@ -26,61 +26,75 @@ const MyFormik = ({
             ]);
     }, [status]);
     return (
-        <Form>
-            <label htmlFor="name">
-                Name:
-            </label>
-            <Field 
-            id="name"
-            type="text"
-            name="name"
-            />
-            {touched.name &&
-                errors.name && (
-                    <p>
-                        {errors.name}
-                    </p>
+        <div>
+            <Form>
+                <label htmlFor="name">
+                    Name:
+                </label>
+                <Field 
+                id="name"
+                type="text"
+                name="name"
+                />
+                {touched.name &&
+                    errors.name && (
+                        <p>
+                            {errors.name}
+                        </p>
+                    )}
+                <label htmlFor="Email">
+                    Email:
+                </label>
+                <Field
+                id="email"
+                type="text"
+                name="email"
+                />
+                {touched.email &&
+                    errors.email && (
+                        <p>
+                            {errors.email}
+                        </p>
+                    )}
+                <label htmlFor="Password">
+                    Password:
+                </label>
+                <Field
+                id="password"
+                type="text"
+                name="password"
+                />
+                {touched.password &&
+                    errors.password && (
+                        <p>
+                            {errors.password}
+                        </p>
+                    )}
+                <Field
+                id="TermsOfService"
+                type="checkbox"
+                name="TermsOfService"
+                />
+                {touched.TermsOfService && errors.TermsOfService && (
+                    <p>{errors.TermsOfService}</p>
                 )}
-            <label htmlFor="Email">
-                Email:
-            </label>
-            <Field
-            id="email"
-            type="text"
-            name="email"
-            />
-             {touched.email &&
-                errors.email && (
-                    <p>
-                        {errors.email}
-                    </p>
-                )}
-            <label htmlFor="Password">
-                Password:
-            </label>
-            <Field
-            id="password"
-            type="text"
-            name="password"
-            />
-             {touched.password &&
-                errors.password && (
-                    <p>
-                        {errors.password}
-                    </p>
-                )}
-            <Field
-            id="TermsOfService"
-            type="checkbox"
-            name="TermsOfService"
-            />
-            {touched.TermsOfService && errors.TermsOfService && (
-                <p>{errors.TermsOfService}</p>
-            )}
-            <button type="submit">
-                Submit
-            </button>
-        </Form>
+                <button type="submit">
+                    Submit
+                </button>
+            </Form>
+            {member.map(member => {
+                return (
+                    <ul key={member.id}>
+                        <li>
+                            name: {member.name}
+                        </li>
+                        <li>
+                            email: {member.email}
+                        </li>
+                    </ul>
+                )
+            })}
+        </div>
     );
 };
 
@@ -93,7 +107,7 @@ const FormikForm = withFormik ({
         return {
             name: "",
             email: "",
-            passowrd: ""
+            password: ""
         };
     },
     validationSchema: Yup.object().shape({
