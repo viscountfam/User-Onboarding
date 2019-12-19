@@ -70,6 +70,115 @@ const MyFormik = ({
                             {errors.password}
                         </p>
                     )}
+                <label htmlFor="role">
+                    Role:
+                </label>
+                <Field 
+                id="role"
+                as="select"
+                name="role"
+                >
+                 <option>
+                     Select a Role
+                     </option> 
+                  <option value="Fullstack Web Developer">
+                    Fullstack Web Developer
+                  </option>
+                  <option value="UX Designer">
+                        UX Designer
+                  </option>
+                  <option value="Data Scientist">
+                        Data Scientist
+                  </option>
+                  <option value="IOS Developer">
+                        IOS Developer
+                  </option>
+                </Field>
+                {touched.role && errors.role && (
+                    <p>{errors.role}</p>
+                )}
+                <label htmlFor="birthday">
+                    Birthday:
+                </label>
+                <Field
+                id="birthday"
+                type="date"
+                name="birthday"
+                />
+                {touched.birthday && errors.birthday && (
+                    <p>{errors.birthday}</p>
+                )}
+                <label htmlFor="state">
+                    State:
+                </label>
+                <Field
+                id="state"
+                as="select"
+                name="state"
+                >
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="DC">District Of Columbia</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="NY">New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option>
+                    <option value="UT">Utah</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WA">Washington</option>
+                    <option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                    <option value="WY">Wyoming</option>
+                </Field>
+                {touched.state && errors.state && (
+                    <p>{errors.state}</p>
+                )}
+                <label htmlFor="city">
+                    City:
+                </label>
+                <Field
+                id="city"
+                type="text"
+                name="city"
+                />
                 <Field
                 id="TermsOfService"
                 type="checkbox"
@@ -82,16 +191,24 @@ const MyFormik = ({
                     Submit
                 </button>
             </Form>
+            <h1>Users</h1>
             {member.map(member => {
                 return (
-                    <ul key={member.id}>
-                        <li>
-                            name: {member.name}
-                        </li>
-                        <li>
-                            email: {member.email}
-                        </li>
-                    </ul>
+                    <div key={member.id}>
+                        <h2>
+                            Name: {member.name}
+                        </h2>
+                        <h3>
+                            Email: {member.email}
+                        </h3>
+                        <h4>
+                            {member.role}
+                        </h4>
+                        <h4>
+                            {member.state}
+                            {member.city}
+                        </h4>
+                    </div>
                 )
             })}
         </div>
@@ -102,19 +219,26 @@ const FormikForm = withFormik ({
     mapPropsToValues({
         name,
         email,
-        password
+        password,
+        city
     }) {
         return {
             name: "",
             email: "",
-            password: ""
+            password: "",
+            city: ""
         };
     },
     validationSchema: Yup.object().shape({
         name: Yup.string().required(),
-        email: Yup.string().required(),
+        email: Yup.string().email("invalid Email").required(),
         password: Yup.string().required(),
+        role: Yup.string().oneOf(["Fullstack Web Developer", "UX Designer", "Data Scientist", "IOS Developer"]).required("Please choose a role"),
+        birthday: Yup.date().required("Please enter a date"),
+        state: Yup.string().oneOf(["Al", "AK", "AX", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "NE", "NH", "NJ", "NM", "NV", "NY", "ND", "OH", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WI", "WV" ]).required("Select your state"),
+        city: Yup.string().required("Enter your city"),
         TermsOfService: Yup.boolean().oneOf([true], "You must agree to the Terms of Service")
+    
     }),
     handleSubmit(values, {setStatus, resetForm}) {
         console.log("submitting", values);
