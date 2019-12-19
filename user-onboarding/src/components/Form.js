@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import {
     withFormik,
     Form, 
@@ -8,11 +8,23 @@ import * as Yup from "yup";
 import axios from "axios";
 
 
-const myFormik = ({
+const MyFormik = ({
     values,
     errors, 
-    touched
+    touched,
+    status
 }) => {
+    const [member, setMember] = useState([]);
+
+    useEffect(() => {
+        console.log("status has changed!", status);
+
+        status && 
+            setMember(member => [
+                ...member,
+                status
+            ]);
+    }, [status]);
     return (
         <Form>
             <label htmlFor="name">
@@ -62,6 +74,9 @@ const myFormik = ({
             type="checkbox"
             name="TermsOfService"
             />
+            {touched.TermsOfService && errors.TermsOfService && (
+                <p>{errors.TermsOfService}</p>
+            )}
             <button type="submit">
                 Submit
             </button>
@@ -84,8 +99,20 @@ const FormikForm = withFormik ({
     validationSchema: Yup.object().shape({
         name: Yup.string().required(),
         email: Yup.string().required(),
-        password: Yup.string().required()
+        password: Yup.string().required(),
+        TermsOfService: Yup.boolean().oneOf([true], "You must agree to the Terms of Service")
     }),
-})(myFormik);
+    handleSubmit(values, {setStatus, resetForm}) {
+        console.log("submitting", values);
+        axios
+            .post("https://reqres.in/api/users", values)
+            .then(res => {
+                console.log("successful post", res);
+                setStatus(res.data);
+                resetForm();
+            })
+            .catch(err => console.log(err.response));
+    }
+})(MyFormik);
 
 export default FormikForm
